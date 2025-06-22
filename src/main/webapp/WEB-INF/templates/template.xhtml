@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>
+        <ui:insert name="title">Meu Projeto</ui:insert>
+    </title>
+    <!-- Inclua seus CSS/JS aqui -->
+</h:head>
+<h:body>
+    <h:form id="menuForm">
+    <!-- Menu -->
+    <p:menubar>
+        <p:menuitem value="Home" url="#{request.contextPath}/home.xhtml" icon="pi pi-home" />
+        <p:menuitem value="Cadastro" url="#{request.contextPath}/cadastro/cadastro.xhtml" />
+    </p:menubar>
+    </h:form>
+
+    <!-- Conteúdo -->
+    <ui:insert name="content">
+        Conteúdo padrão (se não for definido em outra página)
+    </ui:insert>
+
+    <!-- Rodapé -->
+    <div style="text-align:center; margin-top:20px;">
+        <ui:insert name="footer">Rodapé Padrão</ui:insert>
+    </div>
+</h:body>
+</html>
