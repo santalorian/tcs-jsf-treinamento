@@ -1,1 +1,24 @@
-<h:outputStylesheet library="css" name="style.css" />
+.label {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 8px;
+  vertical-align: middle;
+  width: 160px;
+}
+
+.value {
+  text-align: left;
+  vertical-align: middle;
+}
+
+input,
+.ui-inputfield,
+.ui-inputmask,
+.ui-selectonemenu {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ui-calendar input {
+  width: calc(100% - 30px); /* espaço pro botão de calendário */
+}

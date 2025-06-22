@@ -14,11 +14,17 @@ public class CadastroBean implements Serializable {
     private String email;
     private Date data;
     private String tipoDocumento;
-    private String numeroDocumento;
+    private String numeroCPF;
+    private String numeroCNPJ;
 
     public void salvar() {
-        // lógica para salvar
-        System.out.println("Salvando: " + nome + ", " + tipoDocumento + ": " + numeroDocumento);
+        String documento = null;
+        if ("CPF".equals(tipoDocumento)) {
+            documento = getNumeroCPF();
+        } else if ("CNPJ".equals(tipoDocumento)) {
+            documento = getNumeroCNPJ();
+        }
+        System.out.println("Salvando: " + nome + ", " + idade + ", " + email + ", " + data + ", " + tipoDocumento + ": " + documento);
     }
 
     public void limpar() {
@@ -27,7 +33,8 @@ public class CadastroBean implements Serializable {
         setEmail(null);
         setData(null);
         setTipoDocumento(null);
-        setNumeroDocumento(null);
+        setNumeroCNPJ(null);
+        setNumeroCPF(null);
     }
 
     public String getNome() {
@@ -70,11 +77,19 @@ public class CadastroBean implements Serializable {
         this.tipoDocumento = tipoDocumento;
     }
 
-    public String getNumeroDocumento() {
-        return numeroDocumento;
+    public String getNumeroCPF() {
+        return numeroCPF;
     }
 
-    public void setNumeroDocumento(String numeroDocumento) {
-        this.numeroDocumento = numeroDocumento;
+    public void setNumeroCPF(String numeroCPF) {
+        this.numeroCPF = numeroCPF;
+    }
+
+    public String getNumeroCNPJ() {
+        return numeroCNPJ;
+    }
+
+    public void setNumeroCNPJ(String numeroCNPJ) {
+        this.numeroCNPJ = numeroCNPJ;
     }
 }
