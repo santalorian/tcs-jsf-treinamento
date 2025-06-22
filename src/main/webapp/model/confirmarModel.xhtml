@@ -1,0 +1,21 @@
+<!-- /model/confirmarModel.xhtml -->
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:confirmDialog widgetVar="confirmDialog" header="Confirmação"
+                     message="Deseja confirmar os dados?"
+                     severity="info" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Confirmar"
+                         action="#{cadastroBean.confirmar}"
+                         update="@form"
+                         oncomplete="PF('confirmDialog').hide();"
+                         icon="pi pi-check" />
+        <p:commandButton value="Cancelar"
+                         onclick="PF('confirmDialog').hide(); return false;"
+                         type="button"
+                         icon="pi pi-times"
+                         styleClass="ui-button-secondary" />
+    </p:confirmDialog>
+</ui:composition>
