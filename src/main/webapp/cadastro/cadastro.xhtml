@@ -11,42 +11,63 @@
 
     <ui:define name="content">
         <h:form id="formCadastro">
-            <p:panel header="Formulário de Cadastro" style="width:500px">
+            <p:panel header="Formulário de Cadastro" style="width:600px;">
 
                 <p:messages />
 
-                <p:outputLabel for="nome" value="Nome Completo:" />
-                <p:inputText id="nome" value="#{cadastroBean.nome}" required="true" />
+                <!-- painel de duas colunas: rótulo | input -->
+                <p:panelGrid columns="2" columnClasses="label,value" style="width:100%; margin-bottom:1em;">
 
-                <p:outputLabel for="idade" value="Idade:" />
-                <p:inputText id="idade" value="#{cadastroBean.idade}" />
+                    <p:outputLabel for="nome" value="Nome Completo:" styleClass="label" />
+                    <p:inputText id="nome" value="#{cadastroBean.nome}" required="true" style="width:100%;"/>
 
-                <p:outputLabel for="email" value="E-mail:" />
-                <p:inputText id="email" value="#{cadastroBean.email}" />
+                    <p:outputLabel for="idade" value="Idade:" styleClass="label" />
+                    <p:inputText id="idade" value="#{cadastroBean.idade}" style="width:4em;" />
 
-                <p:outputLabel for="data" value="Data de Nascimento:" />
-                <p:calendar id="data" value="#{cadastroBean.data}" pattern="dd/MM/yyyy" showIcon="true" />
+                    <p:outputLabel for="email" value="E-mail:" styleClass="label" />
+                    <p:inputText id="email" value="#{cadastroBean.email}" style="width:100%;" />
 
-                <p:outputLabel for="tipo" value="Tipo de Documento:" />
-                <p:selectOneMenu id="tipo" value="#{cadastroBean.tipoDocumento}">
-                    <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
-                    <f:selectItem itemLabel="CPF" itemValue="CPF" />
-                    <f:selectItem itemLabel="CNPJ" itemValue="CNPJ" />
-                    <p:ajax update="docPanel" />
-                </p:selectOneMenu>
+                    <p:outputLabel for="data" value="Data de Nascimento:" styleClass="label" />
+                    <p:calendar id="data" value="#{cadastroBean.data}" pattern="dd/MM/yyyy" showIcon="true"/>
 
-                <h:panelGroup id="docPanel" layout="block">
-                    <p:outputLabel value="Número:" rendered="#{cadastroBean.tipoDocumento eq 'CPF'}" />
-                    <p:inputMask mask="999.999.999-99" value="#{cadastroBean.numeroDocumento}" rendered="#{cadastroBean.tipoDocumento eq 'CPF'}" />
+                    <p:outputLabel for="tipo" value="Tipo de Documento:" styleClass="label" />
+                    <p:selectOneMenu id="tipo" value="#{cadastroBean.tipoDocumento}" style="width:100%;">
+                        <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true"/>
+                        <f:selectItem itemLabel="CPF" itemValue="CPF"/>
+                        <f:selectItem itemLabel="CNPJ" itemValue="CNPJ"/>
+                        <p:ajax update="docPanel"/>
+                    </p:selectOneMenu>
 
-                    <p:outputLabel value="Número:" rendered="#{cadastroBean.tipoDocumento eq 'CNPJ'}" />
-                    <p:inputMask mask="99.999.999/9999-99" value="#{cadastroBean.numeroDocumento}" rendered="#{cadastroBean.tipoDocumento eq 'CNPJ'}" />
-                </h:panelGroup>
+                    <!-- espaço extra antes do inputMask -->
+                    <!--                    <h:outputText/>-->
+
+                    <h:panelGroup id="docPanel" layout="block">
+                        <!-- CPF -->
+                        <p:outputLabel for="cpf" value="CPF:" styleClass="label"
+                                       style="#{cadastroBean.tipoDocumento ne 'CPF' ? 'display:none;' : ''}" />
+                        <p:inputMask id="cpf" value="#{cadastroBean.numeroCPF}" mask="999.999.999-99"
+                                     style="width:100%; #{cadastroBean.tipoDocumento ne 'CPF' ? 'display:none;' : ''}" />
+
+                        <!-- CNPJ -->
+                        <p:outputLabel for="cnpj" value="CNPJ:" styleClass="label"
+                                       style="#{cadastroBean.tipoDocumento ne 'CNPJ' ? 'display:none;' : ''}" />
+                        <p:inputMask id="cnpj" value="#{cadastroBean.numeroCNPJ}" mask="99.999.999/9999-99"
+                                     style="width:100%; #{cadastroBean.tipoDocumento ne 'CNPJ' ? 'display:none;' : ''}" />
+                    </h:panelGroup>
+
+                </p:panelGrid>
 
                 <p:separator/>
 
-                <p:commandButton value="Salvar" action="#{cadastroBean.salvar}" update="@form" icon="pi pi-save"/>
-                <p:commandButton value="Limpar" action="#{cadastroBean.limpar}" update="@form" icon="pi pi-refresh" styleClass="ui-button-secondary"/>
+                <p:commandButton value="Salvar"
+                                 action="#{cadastroBean.salvar}"
+                                 update="@form"
+                                 icon="pi pi-save"/>
+                <p:commandButton value="Limpar"
+                                 action="#{cadastroBean.limpar}"
+                                 update="@form"
+                                 icon="pi pi-refresh"
+                                 styleClass="ui-button-secondary"/>
 
             </p:panel>
         </h:form>
@@ -55,5 +76,4 @@
     <ui:define name="footer">
         Rodapé – Página de Cadastro
     </ui:define>
-
 </ui:composition>
