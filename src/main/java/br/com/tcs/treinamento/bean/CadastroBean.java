@@ -33,16 +33,6 @@ public class CadastroBean implements Serializable {
      * Após persistir, exibe o popup de sucesso.
      */
     public void confirmar() {
-        // Logs para conferência
-        System.out.println("CONFIRMAÇÃO:");
-        System.out.println("Nome: " + cadastrarPessoa.getNome());
-        System.out.println("Idade: " + cadastrarPessoa.getIdade());
-        System.out.println("Email: " + cadastrarPessoa.getEmail());
-        System.out.println("Data: " + cadastrarPessoa.getData());
-        System.out.println("Tipo: " + cadastrarPessoa.getTipoDocumento());
-        System.out.println("CPF: " + cadastrarPessoa.getNumeroCPF());
-        System.out.println("CNPJ: " + cadastrarPessoa.getNumeroCNPJ());
-
         // Converte o VO para a entidade Pessoa
         Pessoa pessoa = new Pessoa();
         pessoa.setNome(cadastrarPessoa.getNome());
@@ -52,7 +42,7 @@ public class CadastroBean implements Serializable {
         pessoa.setTipoDocumento(cadastrarPessoa.getTipoDocumento());
         pessoa.setNumeroCPF(cadastrarPessoa.getNumeroCPF());
         pessoa.setNumeroCNPJ(cadastrarPessoa.getNumeroCNPJ());
-        System.out.println("Pessoa: " + pessoa.toString());
+        pessoa.setAtivo(true);
 
         // Chama o service para persistir a entidade
         try {
@@ -116,9 +106,6 @@ public class CadastroBean implements Serializable {
             PrimeFaces.current().executeScript("PF('confirmDialog').show();");
         }
     }
-
-    // Getters and Setters
-
     public String getErrorMessage() {
         return errorMessage;
     }
