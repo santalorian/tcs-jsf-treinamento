@@ -104,8 +104,9 @@
                 <h:outputText value="Cadastro alterado com sucesso!" />
                 <f:facet name="footer">
                     <p:commandButton value="Ok"
-                                     onclick="PF('successDialog').hide();"
-                                     type="button" />
+                                     type="button"
+                                     onclick="PF('successDialog').hide(); window.location='#{request.contextPath}/cadastro/consultaPessoas.xhtml';"
+                                     icon="pi pi-check" />
                 </f:facet>
             </p:dialog>
         </h:form>

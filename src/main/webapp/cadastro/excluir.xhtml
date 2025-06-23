@@ -1,0 +1,80 @@
+<ui:composition template="/WEB-INF/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Exclusão de Pessoa
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formExclusao">
+            <!-- Inclui o modal de confirmação para exclusão (confirmarModel.xhtml atualizado) -->
+            <ui:include src="/model/confirmarExclusaoModel.xhtml">
+                <ui:param name="modalBean" value="#{consultaPessoaBean}" />
+            </ui:include>
+
+            <p:panel header="Formulário de Exclusão" style="width:600px;">
+                <!-- Mensagens Gerais -->
+                <p:messages showDetail="true" closable="true" />
+
+                <!-- Painel de Dados da Pessoa (somente leitura) -->
+                <p:panelGrid columns="2" columnClasses="label,value" style="width:100%; margin-bottom:1em;">
+                    <p:outputLabel for="nome" value="Nome Completo:" style="text-align:left; white-space:nowrap;" />
+                    <h:outputText id="nome" value="#{consultaPessoaBean.pessoaSelecionada.nome}" />
+
+                    <p:outputLabel for="idade" value="Idade:" />
+                    <h:outputText id="idade" value="#{consultaPessoaBean.pessoaSelecionada.idade}" />
+
+                    <p:outputLabel for="email" value="E-mail:" />
+                    <h:outputText id="email" value="#{consultaPessoaBean.pessoaSelecionada.email}" />
+
+                    <p:outputLabel for="data" value="Data de Nascimento:" />
+                    <h:outputText id="data">
+                        <f:convertDateTime pattern="dd/MM/yyyy" value="#{consultaPessoaBean.pessoaSelecionada.data}" />
+                    </h:outputText>
+
+                    <p:outputLabel for="tipo" value="Tipo de Documento:" />
+                    <h:outputText id="tipo" value="#{consultaPessoaBean.pessoaSelecionada.tipoDocumento}" />
+
+                    <p:outputLabel for="doc" value="Documento:" />
+                    <h:outputText id="doc"
+                                  value="#{consultaPessoaBean.pessoaSelecionada.tipoDocumento eq 'CPF' ?
+                                           consultaPessoaBean.pessoaSelecionada.numeroCPF :
+                                           consultaPessoaBean.pessoaSelecionada.numeroCNPJ}" />
+
+                    <p:outputLabel for="status" value="Status:" />
+                    <h:outputText id="status"
+                                  value="#{consultaPessoaBean.pessoaSelecionada.ativo ? 'Ativo' : 'Inativo'}" />
+                </p:panelGrid>
+
+                <p:separator />
+
+                <!-- Botões de Ação -->
+                <p:commandButton value="Limpar" action="#{consultaPessoaBean.limparAlteracoes}" update="@form"
+                                 icon="pi pi-refresh" styleClass="ui-button-secondary" />
+
+                <!-- Botão que abre o modal de confirmação (nosso novo modal usa widgetVar 'exclusionConfirmDialog') -->
+                <p:commandButton value="Excluir" onclick="PF('exclusionConfirmDialog').show(); return false;"
+                                 icon="pi pi-trash" styleClass="ui-button-danger" />
+            </p:panel>
+
+            <!-- Modal de Sucesso para Exclusão -->
+            <p:dialog widgetVar="successDialog" header="Sucesso" modal="true" closable="false" resizable="false">
+                <h:outputText value="Exclusão realizada com sucesso!" />
+                <f:facet name="footer">
+                    <p:commandButton value="Ok"
+                                     action="#{consultaPessoaBean.atualizarConsulta}"
+                                     ajax="false"
+                                     icon="pi pi-check" />
+                </f:facet>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="footer">
+        Rodapé – Exclusão de Pessoa
+    </ui:define>
+</ui:composition>

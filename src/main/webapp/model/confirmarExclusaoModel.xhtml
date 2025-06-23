@@ -1,0 +1,20 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:confirmDialog widgetVar="exclusionConfirmDialog" header="Confirmação de Exclusão"
+                     message="Deseja confirmar a exclusão (inativação) deste registro?"
+                     severity="warn" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Excluir"
+                         action="#{modalBean.confirmarExclusao}"
+                         update="@form"
+                         oncomplete="PF('exclusionConfirmDialog').hide();"
+                         icon="pi pi-check" />
+        <p:commandButton value="Cancelar"
+                         onclick="PF('exclusionConfirmDialog').hide(); return false;"
+                         type="button"
+                         icon="pi pi-times"
+                         styleClass="ui-button-secondary" />
+    </p:confirmDialog>
+</ui:composition>

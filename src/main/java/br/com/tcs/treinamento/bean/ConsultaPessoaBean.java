@@ -23,6 +23,7 @@ public class ConsultaPessoaBean implements Serializable {
     private Pessoa pessoaSelecionada;
     private String errorMessage;
     private Long pessoaId;
+    private Boolean tpManutencao;
 
     private transient PessoaService pessoaService = new PessoaServiceImpl();
 
@@ -41,18 +42,30 @@ public class ConsultaPessoaBean implements Serializable {
                 errorMessage = "ID inválido da pessoa.";
             }
         }
+        // Recupera o parâmetro tpManutencao; se não existir, assume um valor padrão (por exemplo, true para edição)
+        String tpParam = params.get("tpManutencao");
+        if (tpParam != null && !tpParam.trim().isEmpty()) {
+            setTpManutencao(Boolean.valueOf(tpParam));
+        } else {
+            setTpManutencao(true);
+        }
         pessoas = pessoaService.listar();
     }
 
     public String prepararEdicao(Pessoa pessoa) {
         this.pessoaSelecionada = pessoa;
-        return "alterar?faces-redirect=true&pessoaId=" + pessoa.getId();
+        return "alterar?faces-redirect=true&pessoaId=" + pessoa.getId() + "&tpManutencao=true";
     }
 
-    public String salvarAlteracoes() {
+    public String prepararExclusao(Pessoa pessoa) {
+        this.pessoaSelecionada = pessoa;
+        return "excluir?faces-redirect=true&pessoaId=" + pessoa.getId() + "&tpManutencao=false";
+    }
+
+    public String atualizarConsulta() {
         pessoaService.atualizar(pessoaSelecionada);
         pessoas = pessoaService.listar();
-        return "consulta?faces-redirect=true";
+        return "consultaPessoas?faces-redirect=true";
     }
 
     public void limparAlteracoes() {
@@ -61,16 +74,31 @@ public class ConsultaPessoaBean implements Serializable {
         }
     }
 
-    public void prepararExclusao(Pessoa pessoa) {
-        this.pessoaSelecionada = pessoa;
-    }
-
     /**
      * Método que converte o VO para a entidade e chama o service para persistir.
      * Após persistir, exibe o popup de sucesso.
      */
     public void confirmar() {
         // Converte o VO para a entidade Pessoa
+        Pessoa pessoa = mapPessoaEntity();
+        // Chama o service para persistir a entidade
+        try {
+            pessoaService.atualizar(pessoa);
+            // Exibe o popup de sucesso após a confirmação
+            PrimeFaces.current().executeScript("PF('successDialog').show();");
+        } catch (Exception e) {
+            // Em caso de erro na persistência, exibe o diálogo de erro
+            errorMessage = "Erro ao cadastrar pessoa: " + e.getMessage();
+            PrimeFaces.current().executeScript("PF('errorDialog').show();");
+            return;
+        }
+    }
+
+    /**
+     * mapPessoaEntity
+     * Mapeamento da VO para Entity
+     */
+    private Pessoa mapPessoaEntity() {
         Pessoa pessoa = new Pessoa();
         pessoa.setId(pessoaSelecionada.getId());
         pessoa.setNome(pessoaSelecionada.getNome());
@@ -81,10 +109,15 @@ public class ConsultaPessoaBean implements Serializable {
         pessoa.setNumeroCPF(pessoaSelecionada.getNumeroCPF());
         pessoa.setNumeroCNPJ(pessoaSelecionada.getNumeroCNPJ());
         pessoa.setDataManutencao(new Date());
+        pessoa.setAtivo(getTpManutencao());
+        return pessoa;
+    }
 
-        // Chama o service para persistir a entidade
+    public void confirmarExclusao(){
+        Pessoa pessoa = mapPessoaEntity();
         try {
-            pessoaService.atualizar(pessoa);
+            //pessoaService.atualizar(pessoa); //Exclusao logica
+            pessoaService.excluir(pessoa); // Exclusao fisica
             // Exibe o popup de sucesso após a confirmação
             PrimeFaces.current().executeScript("PF('successDialog').show();");
         } catch (Exception e) {
@@ -142,8 +175,6 @@ public class ConsultaPessoaBean implements Serializable {
         // implementar Excel
     }
 
-    // Getters e Setters
-
     public List<Pessoa> getPessoas() {
         return pessoas;
     }
@@ -182,5 +213,13 @@ public class ConsultaPessoaBean implements Serializable {
 
     public void setPessoaService(PessoaService pessoaService) {
         this.pessoaService = pessoaService;
+    }
+
+    public Boolean getTpManutencao() {
+        return tpManutencao;
+    }
+
+    public void setTpManutencao(Boolean tpManutencao) {
+        this.tpManutencao = tpManutencao;
     }
 }
