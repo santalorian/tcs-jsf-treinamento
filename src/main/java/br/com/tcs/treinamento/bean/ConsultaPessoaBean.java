@@ -116,8 +116,8 @@ public class ConsultaPessoaBean implements Serializable {
     public void confirmarExclusao(){
         Pessoa pessoa = mapPessoaEntity();
         try {
-            //pessoaService.atualizar(pessoa); //Exclusao logica
-            pessoaService.excluir(pessoa); // Exclusao fisica
+            pessoaService.atualizar(pessoa); //Exclusao logica
+            //pessoaService.excluir(pessoa); // Exclusao fisica
             // Exibe o popup de sucesso após a confirmação
             PrimeFaces.current().executeScript("PF('successDialog').show();");
         } catch (Exception e) {
@@ -168,11 +168,11 @@ public class ConsultaPessoaBean implements Serializable {
     }
 
     public void exportarPdf() {
-        // implementar PDF
+        System.out.println("Implementar metodo para PDF");
     }
 
     public void exportarExcel() {
-        // implementar Excel
+        System.out.println("Implementar metodo para Excel");
     }
 
     public List<Pessoa> getPessoas() {
