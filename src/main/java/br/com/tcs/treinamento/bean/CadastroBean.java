@@ -2,113 +2,146 @@ package br.com.tcs.treinamento.bean;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import br.com.tcs.treinamento.entity.Pessoa;
+import br.com.tcs.treinamento.model.PessoaVO;
+import br.com.tcs.treinamento.service.PessoaService;
+import br.com.tcs.treinamento.service.impl.PessoaServiceImpl;
 import org.primefaces.PrimeFaces;
 
 @ManagedBean(name="cadastroBean")
 @ViewScoped
 public class CadastroBean implements Serializable {
+    private static final long serialVersionUID = 3450069247988201468L;
 
-    private String nome;
-    private Integer idade;
-    private String email;
-    private Date data;
-    private String tipoDocumento; // "CPF" ou "CNPJ"
-    private String numeroCPF;
-    private String numeroCNPJ;
+    // Classe VO para os dados da pessoa
+    private PessoaVO cadastrarPessoa = new PessoaVO();
 
     // Propriedade para armazenar as mensagens de erro
     private String errorMessage;
 
-    // Getters e setters para todos os atributos...
+    // Instancia manualmente o serviço – assim, o container não fará a injeção de dependências.
+    private transient PessoaService pessoaService = new PessoaServiceImpl();
+
+    /**
+     * Método que converte o VO para a entidade e chama o service para persistir.
+     * Após persistir, exibe o popup de sucesso.
+     */
+    public void confirmar() {
+        // Logs para conferência
+        System.out.println("CONFIRMAÇÃO:");
+        System.out.println("Nome: " + cadastrarPessoa.getNome());
+        System.out.println("Idade: " + cadastrarPessoa.getIdade());
+        System.out.println("Email: " + cadastrarPessoa.getEmail());
+        System.out.println("Data: " + cadastrarPessoa.getData());
+        System.out.println("Tipo: " + cadastrarPessoa.getTipoDocumento());
+        System.out.println("CPF: " + cadastrarPessoa.getNumeroCPF());
+        System.out.println("CNPJ: " + cadastrarPessoa.getNumeroCNPJ());
+
+        // Converte o VO para a entidade Pessoa
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome(cadastrarPessoa.getNome());
+        pessoa.setIdade(cadastrarPessoa.getIdade());
+        pessoa.setEmail(cadastrarPessoa.getEmail());
+        pessoa.setData(cadastrarPessoa.getData());
+        pessoa.setTipoDocumento(cadastrarPessoa.getTipoDocumento());
+        pessoa.setNumeroCPF(cadastrarPessoa.getNumeroCPF());
+        pessoa.setNumeroCNPJ(cadastrarPessoa.getNumeroCNPJ());
+        System.out.println("Pessoa: " + pessoa.toString());
+
+        // Chama o service para persistir a entidade
+        try {
+            pessoaService.cadastrar(pessoa);
+            // Exibe o popup de sucesso após a confirmação
+            PrimeFaces.current().executeScript("PF('successDialog').show();");
+        } catch (Exception e) {
+            // Em caso de erro na persistência, exibe o diálogo de erro
+            errorMessage = "Erro ao cadastrar pessoa: " + e.getMessage();
+            PrimeFaces.current().executeScript("PF('errorDialog').show();");
+            return;
+        }
+    }
 
     public void limpar() {
-        nome = null;
-        idade = null;
-        email = null;
-        data = null;
-        tipoDocumento = null;
-        numeroCPF = null;
-        numeroCNPJ = null;
+        cadastrarPessoa.setNome(null);
+        cadastrarPessoa.setIdade(null);
+        cadastrarPessoa.setEmail(null);
+        cadastrarPessoa.setData(null);
+        cadastrarPessoa.setTipoDocumento(null);
+        cadastrarPessoa.setNumeroCPF(null);
+        cadastrarPessoa.setNumeroCNPJ(null);
+        errorMessage = null;
     }
 
     public void validarCampos() {
         List<String> erros = new ArrayList<>();
 
-        if (nome == null || nome.trim().isEmpty()) {
+        if (cadastrarPessoa.getNome() == null || cadastrarPessoa.getNome().trim().isEmpty()) {
             erros.add("Nome não informado.");
         }
-        if (idade == null) {
+        if (cadastrarPessoa.getIdade() == null) {
             erros.add("Idade não informada.");
         }
-        if (email == null || email.trim().isEmpty()) {
+        if (cadastrarPessoa.getEmail() == null || cadastrarPessoa.getEmail().trim().isEmpty()) {
             erros.add("E-mail não informado.");
         }
-        if (data == null) {
+        if (cadastrarPessoa.getData() == null) {
             erros.add("Data de nascimento não informada.");
         }
-        if (tipoDocumento == null || tipoDocumento.trim().isEmpty()) {
+        if (cadastrarPessoa.getTipoDocumento() == null || cadastrarPessoa.getTipoDocumento().trim().isEmpty()) {
             erros.add("Tipo de documento não informado.");
         } else {
-            if ("CPF".equals(tipoDocumento)) {
-                if (numeroCPF == null || numeroCPF.trim().isEmpty() || numeroCPF.trim().length() < 11) {
+            if ("CPF".equals(cadastrarPessoa.getTipoDocumento())) {
+                if (cadastrarPessoa.getNumeroCPF() == null || cadastrarPessoa.getNumeroCPF().trim().isEmpty() ||
+                        cadastrarPessoa.getNumeroCPF().trim().length() < 11) {
                     erros.add("CPF não informado ou incompleto (deve conter 11 dígitos).");
                 }
-            } else if ("CNPJ".equals(tipoDocumento)) {
-                if (numeroCNPJ == null || numeroCNPJ.trim().isEmpty() || numeroCNPJ.trim().length() < 14) {
+            } else if ("CNPJ".equals(cadastrarPessoa.getTipoDocumento())) {
+                if (cadastrarPessoa.getNumeroCNPJ() == null || cadastrarPessoa.getNumeroCNPJ().trim().isEmpty() ||
+                        cadastrarPessoa.getNumeroCNPJ().trim().length() < 14) {
                     erros.add("CNPJ não informado ou incompleto (deve conter 14 dígitos).");
                 }
             }
         }
 
         if (!erros.isEmpty()) {
-            // Concatena as mensagens de erro (pode usar <br/> para quebra de linha, já que escape="false" no XHTML)
             errorMessage = String.join("<br/>", erros);
-            // Exibe o diálogo de erro
             PrimeFaces.current().executeScript("PF('errorDialog').show();");
         } else {
-            // Se não houver erros, exibe o diálogo de confirmação
             PrimeFaces.current().executeScript("PF('confirmDialog').show();");
         }
     }
 
-    public void confirmar() {
-        // Neste método, pode tratar a persistência dos dados.
-        System.out.println("CONFIRMAÇÃO:");
-        System.out.println("Nome: " + nome);
-        System.out.println("Idade: " + idade);
-        System.out.println("Email: " + email);
-        System.out.println("Data: " + data);
-        System.out.println("Tipo: " + tipoDocumento);
-        System.out.println("CPF: " + numeroCPF);
-        System.out.println("CNPJ: " + numeroCNPJ);
+    // Getters and Setters
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+    public PessoaVO getCadastrarPessoa() {
+        return cadastrarPessoa;
+    }
+    public void setCadastrarPessoa(PessoaVO cadastrarPessoa) {
+        this.cadastrarPessoa = cadastrarPessoa;
+    }
+    public PessoaService getPessoaService() {
+        return pessoaService;
+    }
+    public void setPessoaService(PessoaService pessoaService) {
+        this.pessoaService = pessoaService;
+    }
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        // Realiza a deserialização padrão
+        ois.defaultReadObject();
+        // Re-inicializa o serviço para evitar que seja nulo ou uma instância não serializável
+        this.pessoaService = new PessoaServiceImpl();
     }
 
-    // Getters e setters
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
-
-    public Integer getIdade() { return idade; }
-    public void setIdade(Integer idade) { this.idade = idade; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public Date getData() { return data; }
-    public void setData(Date data) { this.data = data; }
-
-    public String getTipoDocumento() { return tipoDocumento; }
-    public void setTipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; }
-
-    public String getNumeroCPF() { return numeroCPF; }
-    public void setNumeroCPF(String numeroCPF) { this.numeroCPF = numeroCPF; }
-
-    public String getNumeroCNPJ() { return numeroCNPJ; }
-    public void setNumeroCNPJ(String numeroCNPJ) { this.numeroCNPJ = numeroCNPJ; }
-
-    public String getErrorMessage() { return errorMessage; }
-    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
 }

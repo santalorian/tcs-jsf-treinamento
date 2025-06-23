@@ -25,7 +25,7 @@
       <version>2.3.7</version>
     </dependency>
 
-    <!-- API Java EE (para suportar as anotações do JSF, por exemplo) -->
+    <!-- API Java EE -->
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-web-api</artifactId>
@@ -60,24 +60,49 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- Dependência do H2 Database -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>2.1.214</version>
+    </dependency>
+
+    <!-- Dependências do Hibernate (sem exclusões para o Tomcat 9) -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.6.14.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>5.6.14.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <version>2.0</version>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
     <finalName>tcs-jsf-treinamento</finalName>
     <plugins>
-      <!-- Plugin do Tomcat para permitir rodar a aplicação via Maven -->
+      <!-- Plugin do Tomcat 9 para rodar a aplicação via Maven -->
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
-          <!-- Contexto da aplicação; use "/" para deploy na raiz ou defina outro -->
           <path>/tcs-jsf-treinamento</path>
-          <!-- Porta que o Tomcat irá usar, por padrão 8080 -->
           <port>8080</port>
+          <defaultContextFile>${basedir}/src/main/webapp/META-INF/context.xml</defaultContextFile>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
 </project>

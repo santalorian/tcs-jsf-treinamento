@@ -8,7 +8,7 @@
                      message="Deseja confirmar os dados?"
                      severity="info" showEffect="fade" hideEffect="fade">
         <p:commandButton value="Confirmar"
-                         action="#{cadastroBean.confirmar}"
+                         action="#{modalBean.confirmar}"
                          update="@form"
                          oncomplete="PF('confirmDialog').hide();"
                          icon="pi pi-check" />

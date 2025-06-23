@@ -12,7 +12,9 @@
     <ui:define name="content">
         <h:form id="formCadastro">
             <!-- Inclui o modal (confirmarModel.xhtml) para reutilização -->
-            <ui:include src="/model/confirmarModel.xhtml" />
+            <ui:include src="/model/confirmarModel.xhtml" >
+                    <ui:param name="modalBean" value="#{cadastroBean}"/>
+            </ui:include>
 
             <p:panel header="Formulário de Cadastro" style="width:600px;">
                 <!-- Mensagens gerais de erro -->
@@ -20,20 +22,26 @@
 
                 <!-- Formulário com painel de duas colunas -->
                 <p:panelGrid columns="2" columnClasses="label,value" style="width:100%; margin-bottom:1em;">
-                    <p:outputLabel for="nome" value="Nome Completo:" style="text-align: left; white-space: nowrap;" />
-                    <p:inputText id="nome" value="#{cadastroBean.nome}" style="width:100%;" />
+                    <p:outputLabel for="nome" value="Nome Completo:"
+                                   style="text-align: left; white-space: nowrap;" />
+                    <p:inputText id="nome" value="#{cadastroBean.cadastrarPessoa.nome}"
+                                 style="width:100%;" />
 
                     <p:outputLabel for="idade" value="Idade:" styleClass="label" />
-                    <p:inputText id="idade" value="#{cadastroBean.idade}" style="width:4em;" />
+                    <p:inputText id="idade" value="#{cadastroBean.cadastrarPessoa.idade}"
+                                 style="width:4em;" />
 
                     <p:outputLabel for="email" value="E-mail:" styleClass="label" />
-                    <p:inputText id="email" value="#{cadastroBean.email}" style="width:100%;" />
+                    <p:inputText id="email" value="#{cadastroBean.cadastrarPessoa.email}"
+                                 style="width:100%;" />
 
                     <p:outputLabel for="data" value="Data de Nascimento:" styleClass="label" />
-                    <p:calendar id="data" value="#{cadastroBean.data}" pattern="dd/MM/yyyy" showIcon="true" />
+                    <p:calendar id="data" value="#{cadastroBean.cadastrarPessoa.data}"
+                                pattern="dd/MM/yyyy" showIcon="true" />
 
                     <p:outputLabel for="tipo" value="Tipo de Documento:" styleClass="label" />
-                    <p:selectOneMenu id="tipo" value="#{cadastroBean.tipoDocumento}" style="width:100%;">
+                    <p:selectOneMenu id="tipo" value="#{cadastroBean.cadastrarPessoa.tipoDocumento}"
+                                     style="width:100%;">
                         <f:selectItem itemLabel="Selecione" itemValue="" noSelectionOption="true" />
                         <f:selectItem itemLabel="CPF" itemValue="CPF" />
                         <f:selectItem itemLabel="CNPJ" itemValue="CNPJ" />
@@ -44,19 +52,21 @@
                     <h:panelGroup id="docPanel" layout="block">
                         <!-- Campo CPF: exibido se o tipo for CPF -->
                         <p:outputLabel for="cpf" value="CPF:" styleClass="label"
-                                       style="#{cadastroBean.tipoDocumento eq 'CPF' ? '' : 'display:none;'}" />
-                        <p:inputMask id="cpf" value="#{cadastroBean.numeroCPF}" mask="999.999.999-99"
+                                       style="#{cadastroBean.cadastrarPessoa.tipoDocumento eq 'CPF' ? '' : 'display:none;'}" />
+                        <p:inputMask id="cpf" value="#{cadastroBean.cadastrarPessoa.numeroCPF}"
+                                     mask="999.999.999-99"
                                      autoClear="true" unmask="true"
-                                     disabled="#{cadastroBean.tipoDocumento ne 'CPF'}"
-                                     style="width:100%; #{cadastroBean.tipoDocumento eq 'CPF' ? '' : 'display:none;'}" />
+                                     disabled="#{cadastroBean.cadastrarPessoa.tipoDocumento ne 'CPF'}"
+                                     style="width:100%; #{cadastroBean.cadastrarPessoa.tipoDocumento eq 'CPF' ? '' : 'display:none;'}" />
 
                         <!-- Campo CNPJ: exibido se o tipo for CNPJ -->
                         <p:outputLabel for="cnpj" value="CNPJ:" styleClass="label"
-                                       style="#{cadastroBean.tipoDocumento eq 'CNPJ' ? '' : 'display:none;'}" />
-                        <p:inputMask id="cnpj" value="#{cadastroBean.numeroCNPJ}" mask="99.999.999/9999-99"
+                                       style="#{cadastroBean.cadastrarPessoa.tipoDocumento eq 'CNPJ' ? '' : 'display:none;'}" />
+                        <p:inputMask id="cnpj" value="#{cadastroBean.cadastrarPessoa.numeroCNPJ}"
+                                     mask="99.999.999/9999-99"
                                      autoClear="true" unmask="true"
-                                     disabled="#{cadastroBean.tipoDocumento ne 'CNPJ'}"
-                                     style="width:100%; #{cadastroBean.tipoDocumento eq 'CNPJ' ? '' : 'display:none;'}" />
+                                     disabled="#{cadastroBean.cadastrarPessoa.tipoDocumento ne 'CNPJ'}"
+                                     style="width:100%; #{cadastroBean.cadastrarPessoa.tipoDocumento eq 'CNPJ' ? '' : 'display:none;'}" />
                     </h:panelGroup>
                 </p:panelGrid>
 
@@ -79,10 +89,23 @@
             </p:panel>
 
             <!-- Diálogo para exibir a lista de campos não preenchidos -->
-            <p:dialog widgetVar="errorDialog" header="Campos não preenchidos" modal="true" closable="false" resizable="false">
+            <p:dialog widgetVar="errorDialog" header="Campos não preenchidos"
+                      modal="true" closable="false" resizable="false">
                 <h:outputText value="#{cadastroBean.errorMessage}" escape="false" />
                 <f:facet name="footer">
-                    <p:commandButton value="Fechar" onclick="PF('errorDialog').hide();" type="button" />
+                    <p:commandButton value="Fechar"
+                                     onclick="PF('errorDialog').hide();"
+                                     type="button" />
+                </f:facet>
+            </p:dialog>
+            <!-- Diaglogo de sucesso-->
+            <p:dialog widgetVar="successDialog" header="Sucesso"
+                      modal="true" closable="false" resizable="false">
+                <h:outputText value="Cadastro realizado com sucesso!" />
+                <f:facet name="footer">
+                    <p:commandButton value="Ok"
+                                     onclick="PF('successDialog').hide();"
+                                     type="button" />
                 </f:facet>
             </p:dialog>
         </h:form>
