@@ -10,8 +10,8 @@ import java.util.List;
 
 import br.com.tcs.treinamento.entity.Pessoa;
 import br.com.tcs.treinamento.model.PessoaVO;
-import br.com.tcs.treinamento.service.PessoaService;
-import br.com.tcs.treinamento.service.impl.PessoaServiceImpl;
+import br.com.tcs.treinamento.service.pessoa.PessoaService;
+import br.com.tcs.treinamento.service.pessoa.impl.PessoaServiceImpl;
 import org.primefaces.PrimeFaces;
 
 @ManagedBean(name="cadastroBean")

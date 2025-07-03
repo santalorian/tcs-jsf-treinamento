@@ -1,4 +1,4 @@
-package br.com.tcs.treinamento.service;
+package br.com.tcs.treinamento.service.pessoa;
 
 import br.com.tcs.treinamento.entity.Pessoa;
 import java.util.List;

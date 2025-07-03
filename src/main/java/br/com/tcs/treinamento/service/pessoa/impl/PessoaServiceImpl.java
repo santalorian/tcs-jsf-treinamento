@@ -1,8 +1,8 @@
-package br.com.tcs.treinamento.service.impl;
+package br.com.tcs.treinamento.service.pessoa.impl;
 
 import br.com.tcs.treinamento.dao.PessoaDAO;
 import br.com.tcs.treinamento.entity.Pessoa;
-import br.com.tcs.treinamento.service.PessoaService;
+import br.com.tcs.treinamento.service.pessoa.PessoaService;
 
 import java.util.List;
 

@@ -1,0 +1,50 @@
+<ui:composition template="/WEB-INF/templates/template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Consulta de Usuários
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formConsulta">
+            <p:panel header="Lista de Usuários" style="width:100%;">
+                <p:messages showDetail="true" closable="true" />
+
+                <p:dataTable value="#{userBean.usuarios}" var="user"
+                             paginator="true" rows="10"
+                             paginatorPosition="bottom"
+                             responsiveLayout="scroll"
+                             styleClass="ui-datatable-striped">
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{user.id}" />
+                    </p:column>
+
+                    <p:column headerText="Username">
+                        <h:outputText value="#{user.username}" />
+                    </p:column>
+
+                    <p:column headerText="Departamento">
+                        <h:outputText value="#{user.department}" />
+                    </p:column>
+
+                    <p:column headerText="Criado em">
+                        <h:outputText value="#{user.createdAt}" />
+                    </p:column>
+
+                    <p:column headerText="Ativo">
+                        <h:outputText value="#{user.active ? 'Sim' : 'Não'}" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="footer">
+        Rodapé – Consulta de Usuários
+    </ui:define>
+</ui:composition>

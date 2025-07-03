@@ -1,8 +1,8 @@
 package br.com.tcs.treinamento.bean;
 
 import br.com.tcs.treinamento.entity.Pessoa;
-import br.com.tcs.treinamento.service.PessoaService;
-import br.com.tcs.treinamento.service.impl.PessoaServiceImpl;
+import br.com.tcs.treinamento.service.pessoa.PessoaService;
+import br.com.tcs.treinamento.service.pessoa.impl.PessoaServiceImpl;
 import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
